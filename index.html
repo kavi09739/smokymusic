@@ -1,99 +1,119 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smoky Music - Your Playlist</title>
     <style>
-        /* මුළු වෙබ්සයිට් එකේම පෙනුම */
-        body { margin: 0; background: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 120px; overflow-x: hidden; }
+        /* මූලික වර්ණ (Dark Mode - Default) */
+        :root {
+            --bg-color: #000;
+            --text-color: #fff;
+            --card-bg: #111;
+            --accent-color: #ff0000;
+            --glow-shadow: 0 0 15px #ff0000;
+            --secondary-text: #888;
+            --audio-filter: invert(100%) hue-rotate(180deg) brightness(1.8);
+        }
+
+        /* Light Mode එකේ වර්ණ */
+        .light-mode {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --card-bg: #f5f5f5;
+            --accent-color: #d30000;
+            --glow-shadow: 0 0 10px rgba(211, 0, 0, 0.3);
+            --secondary-text: #555;
+            --audio-filter: none;
+        }
+
+        body { 
+            margin: 0; 
+            background: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding-bottom: 120px; 
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s; /* පාට වෙනස් වෙද්දී සිනිදුවට වෙන්න */
+        }
+
         .container { padding: 20px; max-width: 500px; margin: auto; }
         
-        /* Welcome Screen එක */
+        /* Theme Toggle Button */
+        .theme-btn {
+            position: fixed; top: 20px; right: 20px;
+            width: 50px; height: 50px; border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            background: var(--card-bg); color: var(--accent-color);
+            cursor: pointer; z-index: 1000; font-size: 20px;
+            box-shadow: var(--glow-shadow); transition: 0.3s;
+        }
+
+        /* Welcome Screen */
         #welcome-screen {
             height: 100vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle, #1a0000 0%, #000000 100%);
+            background: radial-gradient(circle, rgba(26,0,0,1) 0%, rgba(0,0,0,1) 100%);
         }
+        .light-mode #welcome-screen { background: radial-gradient(circle, #fff 0%, #eee 100%); }
 
-        h2 { color: #ff0000; text-align: center; text-shadow: 0 0 15px #ff0000; letter-spacing: 3px; font-size: 28px; margin-bottom: 10px; }
+        h2 { color: var(--accent-color); text-align: center; text-shadow: var(--glow-shadow); letter-spacing: 3px; font-size: 28px; margin-bottom: 10px; }
 
-        /* නියොන් (Neon) Enter Button එක */
+        /* Neon Enter Button */
         .enter-btn {
-            padding: 15px 45px; font-size: 22px; color: #ff0000; background: transparent;
-            border: 2px solid #ff0000; border-radius: 50px; cursor: pointer;
-            font-weight: bold; margin-top: 30px; position: relative;
-            text-transform: uppercase; letter-spacing: 2px;
-            transition: 0.5s; overflow: hidden;
-            box-shadow: 0 0 15px #ff0000, inset 0 0 10px #ff0000;
+            padding: 15px 45px; font-size: 22px; color: var(--accent-color); background: transparent;
+            border: 2px solid var(--accent-color); border-radius: 50px; cursor: pointer;
+            font-weight: bold; margin-top: 30px; letter-spacing: 2px;
+            transition: 0.5s; box-shadow: var(--glow-shadow);
             animation: pulse 2s infinite;
         }
 
-        /* බටන් එක ගැහෙන Animation එක */
         @keyframes pulse {
-            0% { box-shadow: 0 0 10px #ff0000, inset 0 0 5px #ff0000; transform: scale(1); }
-            50% { box-shadow: 0 0 25px #ff0000, inset 0 0 15px #ff0000; transform: scale(1.05); }
-            100% { box-shadow: 0 0 10px #ff0000, inset 0 0 5px #ff0000; transform: scale(1); }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        .enter-btn:hover {
-            background: #ff0000; color: #fff;
-            box-shadow: 0 0 50px #ff0000;
-        }
+        .enter-btn:hover { background: var(--accent-color); color: #fff; }
 
-        /* සින්දු ලිස්ට් එක පේන්න එන Animation එක */
-        #main-content {
-            animation: fadeIn 1s ease-in-out;
-        }
+        /* Playlist Styles */
+        #main-content { animation: fadeIn 1s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* සර්ච් බාර් එක */
         .search-bar {
-            width: 100%; padding: 15px; border-radius: 30px; border: 2px solid #ff0000;
-            background: #111; color: white; margin-bottom: 25px; outline: none; box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(255,0,0,0.3);
+            width: 100%; padding: 15px; border-radius: 30px; border: 2px solid var(--accent-color);
+            background: var(--card-bg); color: var(--text-color); margin-bottom: 25px; outline: none; box-sizing: border-box;
         }
 
-        /* සින්දු ලිස්ට් එකේ කාඩ්ස් */
         .music-card {
-            background: #111; border-left: 5px solid #ff0000; margin: 12px 0;
+            background: var(--card-bg); border-left: 5px solid var(--accent-color); margin: 12px 0;
             padding: 18px; border-radius: 8px; display: flex; justify-content: space-between;
             align-items: center; cursor: pointer; transition: 0.4s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .music-card:hover { 
-            background: #1a0000; 
-            box-shadow: 0 0 20px rgba(255,0,0,0.6); 
-            transform: scale(1.02); 
-        }
-        .play-icon { color: #ff0000; font-size: 20px; }
-        .hidden { display: none; }
+        .music-card:hover { transform: scale(1.02); box-shadow: var(--glow-shadow); }
+        .play-icon { color: var(--accent-color); font-size: 20px; }
+        .song-info small { color: var(--secondary-text); }
 
-        /* Player Bar එක */
+        /* Player Bar */
         .player-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #0a0a0a; border-top: 3px solid #ff0000;
+            background: var(--card-bg); border-top: 3px solid var(--accent-color);
             padding: 15px; text-align: center; box-sizing: border-box;
-            box-shadow: 0 -10px 30px rgba(0,0,0,1);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
         }
-        audio { width: 100%; height: 35px; filter: invert(100%) hue-rotate(180deg) brightness(1.8); margin-top: 10px; }
-        
-        /* සින්දුව ප්ලේ වෙද්දී ලස්සන වෙන්න පාවෙන Animation එකක් */
-        .playing-now { animation: glow 1.5s infinite alternate; }
-        @keyframes glow {
-            from { text-shadow: 0 0 5px #ff0000; }
-            to { text-shadow: 0 0 20px #ff0000, 0 0 35px #ff4d4d; }
-        }
+        audio { width: 100%; filter: var(--audio-invert); margin-top: 10px; }
+        .playing-now { color: var(--accent-color); font-weight: bold; animation: textGlow 1.5s infinite alternate; }
+        @keyframes textGlow { from { opacity: 0.7; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
+<button class="theme-btn" onclick="toggleMode()" id="modeBtn">🌙</button>
+
 <div id="welcome-screen">
     <h2>SMOKY MUSIC 🚀</h2>
-    <p style="color: #888; font-style: italic;">"Feel the Bass, Own the Vibe"</p>
+    <p style="color: var(--secondary-text); font-style: italic;">"Feel the Bass, Own the Vibe"</p>
     <button class="enter-btn" onclick="enterPlayer()">ENTER PLAYER</button>
 </div>
 
@@ -106,12 +126,10 @@
             <div class="song-info"><strong>18 Wannam</strong><br><small>Yuki Navaratne</small></div>
             <div class="play-icon">▶</div>
         </div>
-
         <div class="music-card" onclick="playSong('Zd8', 'Charith Attalage', 'zd8.mp3')">
             <div class="song-info"><strong>Zd8</strong><br><small>Charith Attalage</small></div>
             <div class="play-icon">▶</div>
         </div>
-
         <div class="music-card" onclick="playSong('Kudda', 'Smokio', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">
             <div class="song-info"><strong>Kudda</strong><br><small>Smokio</small></div>
             <div class="play-icon">▶</div>
@@ -120,13 +138,20 @@
 </div>
 
 <div class="player-bar" id="playerBar" style="display:none;">
-    <div id="nowPlaying" class="playing-now" style="color: #ff0000; font-weight: bold; margin-bottom: 5px;"></div>
+    <div id="nowPlaying" class="playing-now"></div>
     <audio id="audioPlayer" controls>
         <source id="audioSource" src="" type="audio/mpeg">
     </audio>
 </div>
 
 <script>
+    function toggleMode() {
+        const body = document.body;
+        const btn = document.getElementById('modeBtn');
+        body.classList.toggle('light-mode');
+        btn.innerText = body.classList.contains('light-mode') ? "☀️" : "🌙";
+    }
+
     function enterPlayer() {
         document.getElementById('welcome-screen').style.display = 'none';
         document.getElementById('main-content').style.display = 'block';
@@ -137,21 +162,16 @@
         let cards = document.getElementsByClassName('music-card');
         for (let i = 0; i < cards.length; i++) {
             let name = cards[i].innerText.toLowerCase();
-            cards[i].classList.toggle('hidden', !name.includes(input));
+            cards[i].style.display = name.includes(input) ? "flex" : "none";
         }
     }
 
     function playSong(title, artist, url) {
-        let playerBar = document.getElementById('playerBar');
-        let audio = document.getElementById('audioPlayer');
-        let source = document.getElementById('audioSource');
-        let info = document.getElementById('nowPlaying');
-
-        playerBar.style.display = 'block';
-        info.innerText = "Playing: " + title + " - " + artist;
-        source.src = url;
-        audio.load();
-        audio.play();
+        document.getElementById('playerBar').style.display = 'block';
+        document.getElementById('nowPlaying').innerText = "Playing: " + title + " - " + artist;
+        document.getElementById('audioSource').src = url;
+        document.getElementById('audioPlayer').load();
+        document.getElementById('audioPlayer').play();
     }
 </script>
 
