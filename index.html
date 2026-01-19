@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoky Music - Your Playlist</title>
+    <style>
+        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; padding-bottom: 120px; }
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        h2 { color: #ff0000; text-align: center; text-shadow: 0 0 10px #ff0000; letter-spacing: 2px; }
+        
+        .search-bar {
+            width: 100%; padding: 15px; border-radius: 30px; border: 2px solid #ff0000;
+            background: #111; color: white; margin-bottom: 25px; outline: none; box-sizing: border-box;
+        }
+
+        .music-card {
+            background: #111; border-left: 5px solid #ff0000; margin: 12px 0;
+            padding: 18px; border-radius: 8px; display: flex; justify-content: space-between;
+            align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .music-card:hover { background: #222; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
+        .play-icon { color: #ff0000; font-size: 20px; }
+        .hidden { display: none; }
+
+        .player-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #0a0a0a; border-top: 3px solid #ff0000;
+            padding: 15px; text-align: center; box-sizing: border-box;
+        }
+        audio { width: 100%; height: 35px; filter: invert(100%) hue-rotate(180deg) brightness(1.5); margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>SMOKY MUSIC PLAYER 🚀</h2>
+    <input type="text" id="myInput" class="search-bar" onkeyup="searchMusic()" placeholder="සින්දුවක් සොයන්න...">
+    
+    <div id="musicList">
+        <div class="music-card" onclick="playSong('18 Wannam', 'Yuki Navarathne', 'wannam.mp3')">
+            <div class="song-info"><strong>18 Wannam</strong><br><small>Yuki Navaratne</small></div>
+            <div class="play-icon">▶</div>
+        </div>
+
+        <div class="music-card" onclick="playSong('Kudda', 'Smokio', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">
+            <div class="song-info"><strong>Kudda</strong><br><small>Smokio</small></div>
+            <div class="play-icon">▶</div>
+        </div>
+
+        <div class="music-card" onclick="playSong('Savari', 'Jayss', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">
+            <div class="song-info"><strong>Savari</strong><br><small>Jayss</small></div>
+            <div class="play-icon">▶</div>
+        </div>
+
+        <div class="music-card" onclick="playSong('Zd8', 'Charith Attalage', 'zd8.mp3')">
+            <div class="song-info"><strong>Zd8</strong><br><small>Charith Attalage</small></div>
+            <div class="play-icon">▶</div>
+        </div>
+    </div>
+</div>
+
+<div class="player-bar" id="playerBar" style="display:none;">
+    <div id="nowPlaying" style="color: #ff0000; font-weight: bold; margin-bottom: 5px;"></div>
+    <audio id="audioPlayer" controls>
+        <source id="audioSource" src="" type="audio/mpeg">
+    </audio>
+</div>
+
+<script>
+    function searchMusic() {
+        let input = document.getElementById('myInput').value.toLowerCase();
+        let cards = document.getElementsByClassName('music-card');
+        for (let i = 0; i < cards.length; i++) {
+            let name = cards[i].innerText.toLowerCase();
+            cards[i].classList.toggle('hidden', !name.includes(input));
+        }
+    }
+
+    function playSong(title, artist, url) {
+        let playerBar = document.getElementById('playerBar');
+        let audio = document.getElementById('audioPlayer');
+        let source = document.getElementById('audioSource');
+        let info = document.getElementById('nowPlaying');
+
+        playerBar.style.display = 'block';
+        info.innerText = title + " - " + artist;
+        source.src = url;
+        audio.load();
+        audio.play();
+    }
+</script>
+
+</body>
+</html>
